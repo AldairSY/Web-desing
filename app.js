@@ -312,7 +312,7 @@ function clearFilters() {
     displayProjects(allProjects);
 }
 
-// ELIMINAR PROYECTO - VERSIÓN CORREGIDA
+// ELIMINAR PROYECTO
 async function deleteProject(projectId, event) {
     event.stopPropagation();
     
@@ -324,7 +324,6 @@ async function deleteProject(projectId, event) {
         console.log('=== INICIANDO ELIMINACIÓN ===');
         console.log('Project ID:', projectId);
         
-        // Primero eliminar el archivo del storage si existe
         const projectToDelete = allProjects.find(p => p.id === projectId);
         if (projectToDelete && projectToDelete.file_path) {
             console.log('Eliminando archivo del storage...');
@@ -337,7 +336,6 @@ async function deleteProject(projectId, event) {
             }
         }
         
-        // Eliminar evaluaciones asociadas
         console.log('Eliminando evaluaciones...');
         const { error: evalError } = await supabase
             .from('evaluations')
@@ -349,7 +347,6 @@ async function deleteProject(projectId, event) {
             throw evalError;
         }
         
-        // Eliminar el proyecto
         console.log('Eliminando proyecto...');
         const { error: projectError } = await supabase
             .from('projects')
@@ -363,11 +360,9 @@ async function deleteProject(projectId, event) {
         
         console.log('✓ Proyecto eliminado de la base de datos');
         
-        // Actualizar la lista local
         allProjects = allProjects.filter(p => p.id !== projectId);
         console.log('✓ Lista local actualizada');
         
-        // Aplicar filtros actuales si hay alguno activo
         const hasActiveFilters = 
             document.getElementById('filterName').value ||
             document.getElementById('filterType').value ||
@@ -390,7 +385,6 @@ async function deleteProject(projectId, event) {
         alert('Error al eliminar proyecto: ' + error.message);
     }
 }
-
 
 function showNewProjectForm() {
     document.getElementById('newProjectForm').reset();
@@ -491,6 +485,135 @@ document.getElementById('newProjectForm').addEventListener('submit', async (e) =
     }
 });
 
+// ===== FUNCIONES PARA DESCARGAR Y VER PDF (MEJORADAS) =====
+
+/**
+ * Descarga el archivo PDF usando fetch y blob
+ */
+async function downloadProjectFile(url) {
+    try {
+        console.log('📥 Iniciando descarga desde:', url);
+        
+        // Obtener el nombre del archivo
+        const fileName = url.split('/').pop().split('?')[0] || 'documento-proyecto.pdf';
+        
+        // Mostrar indicador de carga (opcional)
+        const downloadBtn = event?.target;
+        if (downloadBtn) {
+            const originalText = downloadBtn.textContent;
+            downloadBtn.textContent = '⏳ Descargando...';
+            downloadBtn.disabled = true;
+        }
+        
+        // Método 1: Usar fetch para descargar con blob (mejor para CORS)
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/pdf, application/octet-stream'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            
+            // Convertir a blob
+            const blob = await response.blob();
+            
+            // Crear URL del blob
+            const blobUrl = window.URL.createObjectURL(blob);
+            
+            // Crear enlace temporal y hacer click
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = fileName;
+            link.style.display = 'none';
+            
+            document.body.appendChild(link);
+            link.click();
+            
+            // Limpiar
+            setTimeout(() => {
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(blobUrl);
+            }, 100);
+            
+            console.log('✅ Descarga completada:', fileName);
+            
+        } catch (fetchError) {
+            console.log('⚠️ Fetch falló, usando método alternativo:', fetchError);
+            
+            // Método 2: Fallback - descarga directa
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = fileName;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log('✅ Descarga iniciada (método alternativo)');
+        }
+        
+        // Restaurar botón
+        if (downloadBtn) {
+            setTimeout(() => {
+                downloadBtn.textContent = originalText || '⬇️ Descargar';
+                downloadBtn.disabled = false;
+            }, 1000);
+        }
+        
+    } catch (error) {
+        console.error('❌ Error al descargar archivo:', error);
+        alert('Error al descargar el archivo. Por favor intenta nuevamente.');
+        
+        // Restaurar botón en caso de error
+        if (event?.target) {
+            event.target.textContent = '⬇️ Descargar';
+            event.target.disabled = false;
+        }
+    }
+}
+
+/**
+ * Abre el PDF en una nueva pestaña para visualizarlo
+ */
+function viewProjectFile(url) {
+    console.log('👁️ Abriendo archivo:', url);
+    
+    try {
+        // Abrir en nueva pestaña
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+        
+        // Verificar si se bloqueó el popup
+        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+            alert('Por favor permite ventanas emergentes para ver el documento.');
+        }
+        
+        console.log('✅ Archivo abierto en nueva pestaña');
+    } catch (error) {
+        console.error('❌ Error al abrir archivo:', error);
+        alert('Error al abrir el archivo. Por favor intenta descargarlo en su lugar.');
+    }
+}
+
+/**
+ * Método alternativo simple para descargar (backup)
+ */
+function downloadProjectFileDirect(url, fileName = 'documento-proyecto.pdf') {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
 // ABRIR PROYECTO PARA EVALUACIÓN
 async function openProject(projectId) {
     try {
@@ -509,18 +632,17 @@ async function openProject(projectId) {
         let fileSection = '';
         if (data.file_url) {
             fileSection = `
-                <div class="file-attachment">
-                    <span class="file-attachment-icon">📄</span>
-                    <div class="file-attachment-info">
-                        <div class="file-attachment-name">Documento del Proyecto</div>
-                        <small style="color: #666;">PDF adjunto</small>
+                <div style="margin-top: 25px; padding-top: 25px; border-top: 2px solid #f0f0f0;">
+                    <div class="document-label">
+                        <strong>📄 Documento del Proyecto</strong>
                     </div>
-                    <div class="file-attachment-actions">
+                    <div class="pdf-badge">PDF adjunto</div>
+                    <div class="project-document-buttons" style="margin-top: 15px;">
                         <button onclick="downloadProjectFile('${data.file_url}')" class="btn-download">
-                            ⬇️ Descargar
+                            Descargar
                         </button>
-                        <button onclick="viewProjectFile('${data.file_url}')" class="btn-download" style="background: #3498db;">
-                            👁️ Ver
+                        <button onclick="viewProjectFile('${data.file_url}')" class="btn-view">
+                            Ver
                         </button>
                     </div>
                 </div>
@@ -593,14 +715,6 @@ async function openProject(projectId) {
         console.error('Error loading project:', error);
         alert('Error al cargar proyecto: ' + error.message);
     }
-}
-
-function downloadProjectFile(url) {
-    window.open(url, '_blank');
-}
-
-function viewProjectFile(url) {
-    window.open(url, '_blank');
 }
 
 // GUARDAR EVALUACIÓN
