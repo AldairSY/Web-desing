@@ -3,151 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Evaluación de Proyectos de Investigación e Innovación - Universidad Peruana Los Andes">
+    <meta name="theme-color" content="#00D9FF">
     <title>Sistema de Investigación e Innovación - UPLA</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- PANTALLA DE LOGIN -->
     <div id="loginPage" class="page active">
         <div class="login-container">
             <div class="logo-container">
-                <img src="logo-upla.png" alt="UPLA Logo" class="logo">
+                <img src="logo-upla.png" alt="Logo Universidad Peruana Los Andes" class="logo">
                 <h1>Sistema de Investigación e Innovación</h1>
             </div>
-            <form id="loginForm" class="login-form">
+            <form id="loginForm" class="login-form" aria-labelledby="login-heading">
+                <h2 id="login-heading" class="sr-only">Formulario de inicio de sesión</h2>
                 <div class="form-group">
                     <label for="email">Correo Institucional</label>
-                    <input type="email" id="email" placeholder="usuario@upla.edu.pe" required>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email"
+                        placeholder="usuario@upla.edu.pe" 
+                        required
+                        autocomplete="email"
+                        aria-required="true"
+                        aria-describedby="email-help">
+                    <span id="email-help" class="sr-only">Ingrese su correo institucional de UPLA</span>
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" id="password" placeholder="Ingrese su contraseña" required>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password"
+                        placeholder="Ingrese su contraseña" 
+                        required
+                        autocomplete="current-password"
+                        aria-required="true">
                 </div>
                 <button type="submit" class="btn-primary">Iniciar Sesión</button>
-                <div id="loginError" class="error-message"></div>
+                <div id="loginError" class="error-message" role="alert" aria-live="polite"></div>
             </form>
         </div>
     </div>
 
     <!-- DASHBOARD PRINCIPAL -->
     <div id="dashboardPage" class="page">
-        <nav class="navbar">
+        <nav class="navbar" role="navigation" aria-label="Navegación principal">
             <div class="nav-brand">
-                <img src="logo-upla.png" alt="UPLA" class="nav-logo">
+                <img src="logo-upla.png" alt="Logo UPLA" class="nav-logo">
                 <h2>Investigación e Innovación</h2>
             </div>
             <div class="nav-user">
-                <span id="userName"></span>
+                <span id="userName" aria-label="Usuario actual"></span>
+                <button onclick="logout()" class="btn-secondary" aria-label="Cerrar sesión">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <main class="dashboard-container">
+            <h1 class="page-title">Categorías de Innovación</h1>
+            <div class="categories-grid" role="list">
+                <div class="category-card" 
+                     onclick="openCategory('tecnologica')" 
+                     role="listitem" 
+                     tabindex="0"
+                     onkeypress="if(event.key==='Enter')openCategory('tecnologica')"
+                     data-tooltip="Explora proyectos de desarrollo tecnológico">
+                    <div class="category-icon" aria-hidden="true">💻</div>
+                    <h3>Innovación Tecnológica</h3>
+                    <p>Proyectos de desarrollo tecnológico y software</p>
+                    <button class="btn-category" aria-label="Ver proyectos de innovación tecnológica">Ver Proyectos</button>
+                </div>
+                <div class="category-card" 
+                     onclick="openCategory('aplicada')" 
+                     role="listitem" 
+                     tabindex="0"
+                     onkeypress="if(event.key==='Enter')openCategory('aplicada')"
+                     data-tooltip="Explora proyectos de investigación aplicada">
+                    <div class="category-icon" aria-hidden="true">🔬</div>
+                    <h3>Innovación Aplicada</h3>
+                    <p>Proyectos de investigación aplicada</p>
+                    <button class="btn-category" aria-label="Ver proyectos de innovación aplicada">Ver Proyectos</button>
+                </div>
+                <div class="category-card" 
+                     onclick="openCategory('pedagogica')" 
+                     role="listitem" 
+                     tabindex="0"
+                     onkeypress="if(event.key==='Enter')openCategory('pedagogica')"
+                     data-tooltip="Explora proyectos de mejora educativa">
+                    <div class="category-icon" aria-hidden="true">📚</div>
+                    <h3>Innovación Pedagógica</h3>
+                    <p>Proyectos de mejora educativa</p>
+                    <button class="btn-category" aria-label="Ver proyectos de innovación pedagógica">Ver Proyectos</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- PÁGINA DE CATEGORÍA CON FILTROS -->
+    <div id="categoryPage" class="page">
+        <nav class="navbar" role="navigation" aria-label="Navegación de categoría">
+            <div class="nav-brand">
+                <img src="logo-upla.png" alt="Logo UPLA" class="nav-logo">
+                <h2>Investigación e Innovación</h2>
+            </div>
+            <div class="nav-user">
+                <button onclick="showDashboard()" class="btn-secondary">← Volver</button>
                 <button onclick="logout()" class="btn-secondary">Cerrar Sesión</button>
             </div>
         </nav>
 
-        <div class="dashboard-container">
-            <h1 class="page-title">Categorías de Innovación</h1>
-            <div class="categories-grid">
-                <div class="category-card" onclick="openCategory('tecnologica')">
-                    <div class="category-icon">💻</div>
-                    <h3>Innovación Tecnológica</h3>
-                    <p>Proyectos de desarrollo tecnológico y software</p>
-                    <button class="btn-category">Ver Proyectos</button>
-                </div>
-                <div class="category-card" onclick="openCategory('aplicada')">
-                    <div class="category-icon">🔬</div>
-                    <h3>Innovación Aplicada</h3>
-                    <p>Proyectos de investigación aplicada</p>
-                    <button class="btn-category">Ver Proyectos</button>
-                </div>
-                <div class="category-card" onclick="openCategory('pedagogica')">
-                    <div class="category-icon">📚</div>
-                    <h3>Innovación Pedagógica</h3>
-                    <p>Proyectos de mejora educativa</p>
-                    <button class="btn-category">Ver Proyectos</button>
-                </div>
+        <main class="category-container">
+            <div class="category-header">
+                <h1 id="categoryTitle"></h1>
+                <button onclick="showNewProjectForm()" class="btn-primary" aria-label="Agregar nuevo proyecto">
+                    ✨ Agregar Nuevo Proyecto
+                </button>
             </div>
-        </div>
+
+            <!-- FILTROS DE BÚSQUEDA -->
+            <section class="filters-container" aria-label="Filtros de búsqueda">
+                <div class="filters-title">
+                    <h3>🔍 Filtrar Proyectos</h3>
+                    <button onclick="clearFilters()" class="btn-clear" aria-label="Limpiar todos los filtros">Limpiar Filtros</button>
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-item">
+                        <label for="filterName">Buscar por nombre</label>
+                        <input 
+                            type="text" 
+                            id="filterName" 
+                            placeholder="Nombre del proyecto..." 
+                            oninput="applyFilters()"
+                            aria-label="Filtrar por nombre del proyecto">
+                    </div>
+                    <div class="filter-item">
+                        <label for="filterType">Tipo de proyecto</label>
+                        <select id="filterType" onchange="applyFilters()" aria-label="Filtrar por tipo de proyecto">
+                            <option value="">Todos</option>
+                            <option value="basica">Investigación Básica</option>
+                            <option value="aplicada">Investigación Aplicada</option>
+                            <option value="desarrollo">Desarrollo Tecnológico</option>
+                            <option value="innovacion">Innovación</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="filterResearcher">Investigador</label>
+                        <input 
+                            type="text" 
+                            id="filterResearcher" 
+                            placeholder="Nombre del investigador..." 
+                            oninput="applyFilters()"
+                            aria-label="Filtrar por investigador">
+                    </div>
+                    <div class="filter-item">
+                        <label for="filterProgram">Programa</label>
+                        <input 
+                            type="text" 
+                            id="filterProgram" 
+                            placeholder="Programa de estudio..." 
+                            oninput="applyFilters()"
+                            aria-label="Filtrar por programa de estudio">
+                    </div>
+                </div>
+                <div class="filter-results">
+                    <span id="filterCount" role="status" aria-live="polite">0 proyectos encontrados</span>
+                </div>
+            </section>
+
+            <div id="projectsList" class="projects-list" role="list" aria-label="Lista de proyectos"></div>
+        </main>
     </div>
-    <!-- PÁGINA DE CATEGORÍA CON FILTROS -->
-<div id="categoryPage" class="page">
-    <nav class="navbar">
-        <div class="nav-brand">
-            <img src="logo-upla.png" alt="UPLA" class="nav-logo">
-            <h2>Investigación e Innovación</h2>
-        </div>
-        <div class="nav-user">
-            <button onclick="showDashboard()" class="btn-secondary">Volver</button>
-            <button onclick="logout()" class="btn-secondary">Cerrar Sesión</button>
-        </div>
-    </nav>
-
-    <div class="category-container">
-        <div class="category-header">
-            <h1 id="categoryTitle"></h1>
-            <button onclick="showNewProjectForm()" class="btn-primary">+ Agregar Nuevo Proyecto</button>
-        </div>
-
-        <!-- FILTROS DE BÚSQUEDA -->
-        <div class="filters-container">
-            <div class="filters-title">
-                <h3>🔍 Filtrar Proyectos</h3>
-                <button onclick="clearFilters()" class="btn-clear">Limpiar Filtros</button>
-            </div>
-            <div class="filters-grid">
-                <div class="filter-item">
-                    <label>Buscar por nombre</label>
-                    <input type="text" id="filterName" placeholder="Nombre del proyecto..." oninput="applyFilters()">
-                </div>
-                <div class="filter-item">
-                    <label>Tipo de proyecto</label>
-                    <select id="filterType" onchange="applyFilters()">
-                        <option value="">Todos</option>
-                        <option value="basica">Investigación Básica</option>
-                        <option value="aplicada">Investigación Aplicada</option>
-                        <option value="desarrollo">Desarrollo Tecnológico</option>
-                        <option value="innovacion">Innovación</option>
-                    </select>
-                </div>
-                <div class="filter-item">
-                    <label>Investigador</label>
-                    <input type="text" id="filterResearcher" placeholder="Nombre del investigador..." oninput="applyFilters()">
-                </div>
-                <div class="filter-item">
-                    <label>Programa</label>
-                    <input type="text" id="filterProgram" placeholder="Programa de estudio..." oninput="applyFilters()">
-                </div>
-            </div>
-            <div class="filter-results">
-                <span id="filterCount">0 proyectos encontrados</span>
-            </div>
-        </div>
-
-        <div id="projectsList" class="projects-list"></div>
-    </div>
-</div>
-
 
     <!-- FORMULARIO NUEVO PROYECTO -->
     <div id="newProjectPage" class="page">
-        <nav class="navbar">
+        <nav class="navbar" role="navigation">
             <div class="nav-brand">
-                <img src="logo-upla.png" alt="UPLA" class="nav-logo">
+                <img src="logo-upla.png" alt="Logo UPLA" class="nav-logo">
                 <h2>Nuevo Proyecto</h2>
             </div>
             <div class="nav-user">
-                <button onclick="backToCategory()" class="btn-secondary">Volver</button>
+                <button onclick="backToCategory()" class="btn-secondary">← Volver</button>
             </div>
         </nav>
 
-        <div class="form-container">
-            <h1>Agregar Nuevo Proyecto de Innovación</h1>
-            <form id="newProjectForm" class="project-form">
+        <main class="form-container">
+            <h1>✨ Agregar Nuevo Proyecto de Innovación</h1>
+            <form id="newProjectForm" class="project-form" aria-labelledby="new-project-title">
+                <h2 id="new-project-title" class="sr-only">Formulario de nuevo proyecto de investigación</h2>
+                
                 <div class="form-group">
                     <label for="projectName">Nombre del Proyecto *</label>
-                    <input type="text" id="projectName" required>
+                    <input 
+                        type="text" 
+                        id="projectName" 
+                        name="projectName"
+                        required
+                        aria-required="true"
+                        minlength="10"
+                        maxlength="200"
+                        placeholder="Título completo del proyecto">
                 </div>
 
                 <div class="form-group">
                     <label for="projectType">Tipo de Proyecto *</label>
-                    <select id="projectType" required>
+                    <select id="projectType" name="projectType" required aria-required="true">
                         <option value="">Seleccione...</option>
                         <option value="basica">Investigación Básica</option>
                         <option value="aplicada">Investigación Aplicada</option>
@@ -158,354 +222,712 @@
 
                 <div class="form-group">
                     <label for="researchers">Investigadores *</label>
-                    <textarea id="researchers" rows="3" placeholder="Nombre completo de los investigadores (separados por coma)" required></textarea>
+                    <textarea 
+                        id="researchers" 
+                        name="researchers"
+                        rows="3" 
+                        placeholder="Nombre completo de los investigadores (separados por coma)" 
+                        required
+                        aria-required="true"
+                        minlength="5"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="studyProgram">Programa de Estudio *</label>
-                    <input type="text" id="studyProgram" placeholder="Ej: Ingeniería de Sistemas" required>
+                    <input 
+                        type="text" 
+                        id="studyProgram" 
+                        name="studyProgram"
+                        placeholder="Ej: Ingeniería de Sistemas" 
+                        required
+                        aria-required="true">
                 </div>
 
                 <div class="form-group">
                     <label for="researchLine">Línea de Investigación *</label>
-                    <input type="text" id="researchLine" required>
+                    <input 
+                        type="text" 
+                        id="researchLine" 
+                        name="researchLine"
+                        placeholder="Línea de investigación del proyecto"
+                        required
+                        aria-required="true">
                 </div>
 
                 <div class="form-group">
                     <label for="contactEmail">Correo de Contacto *</label>
-                    <input type="email" id="contactEmail" placeholder="correo@upla.edu.pe" required>
+                    <input 
+                        type="email" 
+                        id="contactEmail" 
+                        name="contactEmail"
+                        placeholder="correo@upla.edu.pe" 
+                        required
+                        aria-required="true"
+                        pattern="[a-z0-9._%+-]+@upla\.edu\.pe$">
                 </div>
 
                 <div class="form-group">
                     <label for="generalInfo">Información General del Proyecto *</label>
-                    <textarea id="generalInfo" rows="5" placeholder="Descripción general del proyecto" required></textarea>
+                    <textarea 
+                        id="generalInfo" 
+                        name="generalInfo"
+                        rows="5" 
+                        placeholder="Descripción general del proyecto" 
+                        required
+                        aria-required="true"
+                        minlength="50"
+                        maxlength="1000"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="problemDescription">Identificación de la Problemática *</label>
-                    <textarea id="problemDescription" rows="4" required></textarea>
+                    <textarea 
+                        id="problemDescription" 
+                        name="problemDescription"
+                        rows="4" 
+                        placeholder="Describa el problema que aborda el proyecto..."
+                        required
+                        aria-required="true"
+                        minlength="50"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="theoreticalFramework">Marco Teórico *</label>
-                    <textarea id="theoreticalFramework" rows="4" required></textarea>
+                    <textarea 
+                        id="theoreticalFramework" 
+                        name="theoreticalFramework"
+                        rows="4" 
+                        placeholder="Base teórica y conceptual del proyecto..."
+                        required
+                        aria-required="true"
+                        minlength="50"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="projectSummary">Resumen del Proyecto *</label>
-                    <textarea id="projectSummary" rows="3" required></textarea>
+                    <textarea 
+                        id="projectSummary" 
+                        name="projectSummary"
+                        rows="3" 
+                        placeholder="Resumen ejecutivo del proyecto..."
+                        required
+                        aria-required="true"
+                        minlength="50"
+                        maxlength="500"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="projectFile">Documento del Proyecto (PDF)</label>
-                    <div class="file-upload-area">
-                        <input type="file" id="projectFile" accept=".pdf" class="file-input">
+                    <div class="file-upload-area" 
+                         id="fileUploadArea"
+                         ondrop="handleFileDrop(event)" 
+                         ondragover="handleDragOver(event)"
+                         ondragleave="handleDragLeave(event)"
+                         role="button"
+                         tabindex="0"
+                         aria-label="Área de carga de archivos PDF">
+                        <input 
+                            type="file" 
+                            id="projectFile" 
+                            name="projectFile"
+                            accept=".pdf" 
+                            class="file-input"
+                            onchange="handleFileSelect(event)"
+                            aria-describedby="file-help">
                         <div class="file-upload-label">
-                            <span class="file-icon">📄</span>
+                            <span class="file-icon" aria-hidden="true">📄</span>
                             <span id="fileName">Selecciona un archivo PDF o arrastra aquí</span>
                         </div>
                     </div>
-                    <small style="color: #666;">Opcional: Adjunta el documento completo del proyecto en formato PDF</small>
+                    <small id="file-help" style="color: #666;">Opcional: Adjunta el documento completo del proyecto en formato PDF</small>
                 </div>
 
-                <div id="uploadProgress" style="display: none;" class="upload-progress">
+                <div id="uploadProgress" style="display: none;" class="upload-progress" role="status" aria-live="polite">
                     <div class="progress-bar">
                         <div id="progressBarFill" class="progress-fill"></div>
                     </div>
                     <span id="progressText">Subiendo archivo...</span>
                 </div>
 
-                <button type="submit" class="btn-primary" id="submitBtn">Guardar Proyecto</button>
+                <div class="form-actions">
+                    <button type="button" onclick="backToCategory()" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="submitBtn">💾 Guardar Proyecto</button>
+                </div>
             </form>
-        </div>
+        </main>
     </div>
 
     <!-- PÁGINA DE EVALUACIÓN -->
     <div id="evaluationPage" class="page">
-        <nav class="navbar">
+        <nav class="navbar" role="navigation">
             <div class="nav-brand">
-                <img src="logo-upla.png" alt="UPLA" class="nav-logo">
+                <img src="logo-upla.png" alt="Logo UPLA" class="nav-logo">
                 <h2>Evaluación de Proyecto</h2>
             </div>
             <div class="nav-user">
-                <button onclick="backToCategory()" class="btn-secondary">Volver</button>
+                <button onclick="backToCategory()" class="btn-secondary">← Volver</button>
             </div>
         </nav>
 
-        <div class="evaluation-container">
+        <main class="evaluation-container">
             <div class="eval-header">
-                <h1 id="evalProjectTitle"></h1>
-                <div class="total-score-badge">
-                    <span>Puntuación Total</span>
+                <h1 id="evalProjectTitle">Evaluación de Proyecto</h1>
+                <div class="total-score-badge" role="status" aria-live="polite">
+                    <span>PUNTUACIÓN TOTAL</span>
                     <div class="score-display" id="totalScoreDisplay">0</div>
-                    <span class="score-max">/ 100 puntos</span>
+                    <div class="score-max">/ 100 PUNTOS</div>
                 </div>
             </div>
             
-            <div class="project-info-card">
+            <section class="project-info-card">
                 <h3>📋 Información del Proyecto</h3>
-                <div id="projectInfoDisplay"></div>
-            </div>
+                <div id="projectInfoDisplay" role="region" aria-label="Información del proyecto"></div>
+            </section>
 
             <div class="evaluation-form-container">
                 <h2>Sistema de Evaluación de Proyectos de Innovación</h2>
                 <p class="eval-subtitle">Complete todas las secciones con sus respectivas calificaciones y observaciones</p>
                 
-                <form id="evaluationForm" class="evaluation-form">
+                <form id="evaluationForm" class="evaluation-form" aria-labelledby="eval-form-title">
+                    <h3 id="eval-form-title" class="sr-only">Formulario de evaluación de proyecto</h3>
                     
                     <!-- SECCIÓN 1 -->
-                    <div class="eval-section">
+                    <section class="eval-section" role="region" aria-labelledby="section1-title">
                         <div class="section-header">
-                            <h3>1️⃣ Datos Generales y Presentación</h3>
-                            <span class="section-points">(0-15 puntos)</span>
+                            <h3 id="section1-title">📝 1. Datos Generales y Presentación</h3>
+                            <span class="section-points" aria-label="Máximo 15 puntos">(0-15 puntos)</span>
                         </div>
                         
                         <div class="eval-criteria">
                             <div class="criteria-item">
-                                <label>1.1 Título del proyecto</label>
+                                <label for="eval1_1">1.1 Título del proyecto</label>
                                 <p class="criteria-desc">Claridad, precisión y relevancia del título</p>
-                                <input type="number" id="eval1_1" min="0" max="3" step="0.5" required>
-                                <span class="max-points">/ 3 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval1_1" 
+                                    name="eval1_1"
+                                    min="0" 
+                                    max="3" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para título del proyecto"
+                                    aria-describedby="eval1_1-max">
+                                <span class="max-points" id="eval1_1-max">/ 3 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>1.2 Datos de los investigadores</label>
+                                <label for="eval1_2">1.2 Datos de los investigadores</label>
                                 <p class="criteria-desc">Completitud y pertinencia de la información</p>
-                                <input type="number" id="eval1_2" min="0" max="3" step="0.5" required>
-                                <span class="max-points">/ 3 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval1_2" 
+                                    name="eval1_2"
+                                    min="0" 
+                                    max="3" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para datos de investigadores"
+                                    aria-describedby="eval1_2-max">
+                                <span class="max-points" id="eval1_2-max">/ 3 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>1.3 Línea de investigación</label>
+                                <label for="eval1_3">1.3 Línea de investigación</label>
                                 <p class="criteria-desc">Coherencia con el programa y área de estudio</p>
-                                <input type="number" id="eval1_3" min="0" max="3" step="0.5" required>
-                                <span class="max-points">/ 3 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval1_3" 
+                                    name="eval1_3"
+                                    min="0" 
+                                    max="3" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para línea de investigación"
+                                    aria-describedby="eval1_3-max">
+                                <span class="max-points" id="eval1_3-max">/ 3 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>1.4 Presentación y formato</label>
+                                <label for="eval1_4">1.4 Presentación y formato</label>
                                 <p class="criteria-desc">Organización, ortografía y estructura del documento</p>
-                                <input type="number" id="eval1_4" min="0" max="3" step="0.5" required>
-                                <span class="max-points">/ 3 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval1_4" 
+                                    name="eval1_4"
+                                    min="0" 
+                                    max="3" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para presentación y formato"
+                                    aria-describedby="eval1_4-max">
+                                <span class="max-points" id="eval1_4-max">/ 3 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>1.5 Documentación adjunta</label>
+                                <label for="eval1_5">1.5 Documentación adjunta</label>
                                 <p class="criteria-desc">Calidad y completitud de archivos complementarios</p>
-                                <input type="number" id="eval1_5" min="0" max="3" step="0.5" required>
-                                <span class="max-points">/ 3 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval1_5" 
+                                    name="eval1_5"
+                                    min="0" 
+                                    max="3" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para documentación adjunta"
+                                    aria-describedby="eval1_5-max">
+                                <span class="max-points" id="eval1_5-max">/ 3 pts</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Observaciones Generales</label>
-                            <textarea id="obs1" rows="3" placeholder="Comentarios sobre datos generales y presentación..."></textarea>
+                            <label for="obs1">Observaciones Generales</label>
+                            <textarea 
+                                id="obs1" 
+                                name="obs1"
+                                rows="3" 
+                                placeholder="Comentarios sobre datos generales y presentación..."
+                                aria-label="Observaciones sobre datos generales"></textarea>
                         </div>
-                        <div class="section-total">Subtotal Sección 1: <span id="subtotal1">0</span> / 15</div>
-                    </div>
+                        <div class="section-total" role="status" aria-live="polite">
+                            Subtotal Sección 1: <span id="subtotal1">0</span> / 15
+                        </div>
+                    </section>
 
                     <!-- SECCIÓN 2 -->
-                    <div class="eval-section">
+                    <section class="eval-section" role="region" aria-labelledby="section2-title">
                         <div class="section-header">
-                            <h3>2️⃣ Resumen Ejecutivo</h3>
-                            <span class="section-points">(0-15 puntos)</span>
+                            <h3 id="section2-title">🎯 2. Resumen Ejecutivo</h3>
+                            <span class="section-points" aria-label="Máximo 15 puntos">(0-15 puntos)</span>
                         </div>
                         
                         <div class="eval-criteria">
                             <div class="criteria-item">
-                                <label>2.1 Claridad del resumen</label>
+                                <label for="eval2_1">2.1 Claridad del resumen</label>
                                 <p class="criteria-desc">Síntesis clara y comprensible del proyecto</p>
-                                <input type="number" id="eval2_1" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval2_1" 
+                                    name="eval2_1"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para claridad del resumen"
+                                    aria-describedby="eval2_1-max">
+                                <span class="max-points" id="eval2_1-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>2.2 Objetivos del proyecto</label>
+                                <label for="eval2_2">2.2 Objetivos del proyecto</label>
                                 <p class="criteria-desc">Definición precisa de objetivos generales y específicos</p>
-                                <input type="number" id="eval2_2" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval2_2" 
+                                    name="eval2_2"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para objetivos del proyecto"
+                                    aria-describedby="eval2_2-max">
+                                <span class="max-points" id="eval2_2-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>2.3 Alcance del proyecto</label>
+                                <label for="eval2_3">2.3 Alcance del proyecto</label>
                                 <p class="criteria-desc">Delimitación clara del alcance y limitaciones</p>
-                                <input type="number" id="eval2_3" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval2_3" 
+                                    name="eval2_3"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para alcance del proyecto"
+                                    aria-describedby="eval2_3-max">
+                                <span class="max-points" id="eval2_3-max">/ 5 pts</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Observaciones sobre el Resumen</label>
-                            <textarea id="obs2" rows="3" placeholder="Comentarios sobre el resumen ejecutivo..."></textarea>
+                            <label for="obs2">Observaciones sobre el Resumen</label>
+                            <textarea 
+                                id="obs2" 
+                                name="obs2"
+                                rows="3" 
+                                placeholder="Comentarios sobre el resumen ejecutivo..."
+                                aria-label="Observaciones sobre el resumen"></textarea>
                         </div>
-                        <div class="section-total">Subtotal Sección 2: <span id="subtotal2">0</span> / 15</div>
-                    </div>
+                        <div class="section-total" role="status" aria-live="polite">
+                            Subtotal Sección 2: <span id="subtotal2">0</span> / 15
+                        </div>
+                    </section>
 
                     <!-- SECCIÓN 3 -->
-                    <div class="eval-section">
+                    <section class="eval-section" role="region" aria-labelledby="section3-title">
                         <div class="section-header">
-                            <h3>3️⃣ Identificación de la Problemática</h3>
-                            <span class="section-points">(0-20 puntos)</span>
+                            <h3 id="section3-title">🔍 3. Identificación de la Problemática</h3>
+                            <span class="section-points" aria-label="Máximo 20 puntos">(0-20 puntos)</span>
                         </div>
                         
                         <div class="eval-criteria">
                             <div class="criteria-item">
-                                <label>3.1 Planteamiento del problema</label>
+                                <label for="eval3_1">3.1 Planteamiento del problema</label>
                                 <p class="criteria-desc">Claridad en la definición y contextualización del problema</p>
-                                <input type="number" id="eval3_1" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval3_1" 
+                                    name="eval3_1"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para planteamiento del problema"
+                                    aria-describedby="eval3_1-max">
+                                <span class="max-points" id="eval3_1-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>3.2 Justificación</label>
+                                <label for="eval3_2">3.2 Justificación</label>
                                 <p class="criteria-desc">Relevancia e importancia del problema a resolver</p>
-                                <input type="number" id="eval3_2" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval3_2" 
+                                    name="eval3_2"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para justificación"
+                                    aria-describedby="eval3_2-max">
+                                <span class="max-points" id="eval3_2-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>3.3 Análisis de causas</label>
+                                <label for="eval3_3">3.3 Análisis de causas</label>
                                 <p class="criteria-desc">Identificación de factores y variables del problema</p>
-                                <input type="number" id="eval3_3" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval3_3" 
+                                    name="eval3_3"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para análisis de causas"
+                                    aria-describedby="eval3_3-max">
+                                <span class="max-points" id="eval3_3-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>3.4 Impacto esperado</label>
+                                <label for="eval3_4">3.4 Impacto esperado</label>
                                 <p class="criteria-desc">Beneficios y alcance de la solución propuesta</p>
-                                <input type="number" id="eval3_4" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval3_4" 
+                                    name="eval3_4"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para impacto esperado"
+                                    aria-describedby="eval3_4-max">
+                                <span class="max-points" id="eval3_4-max">/ 5 pts</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Observaciones sobre la Problemática</label>
-                            <textarea id="obs3" rows="3" placeholder="Comentarios sobre la identificación del problema..."></textarea>
+                            <label for="obs3">Observaciones sobre la Problemática</label>
+                            <textarea 
+                                id="obs3" 
+                                name="obs3"
+                                rows="3" 
+                                placeholder="Comentarios sobre la identificación del problema..."
+                                aria-label="Observaciones sobre la problemática"></textarea>
                         </div>
-                        <div class="section-total">Subtotal Sección 3: <span id="subtotal3">0</span> / 20</div>
-                    </div>
+                        <div class="section-total" role="status" aria-live="polite">
+                            Subtotal Sección 3: <span id="subtotal3">0</span> / 20
+                        </div>
+                    </section>
 
                     <!-- SECCIÓN 4 -->
-                    <div class="eval-section">
+                    <section class="eval-section" role="region" aria-labelledby="section4-title">
                         <div class="section-header">
-                            <h3>4️⃣ Marco Teórico y Conceptual</h3>
-                            <span class="section-points">(0-20 puntos)</span>
+                            <h3 id="section4-title">📚 4. Marco Teórico y Conceptual</h3>
+                            <span class="section-points" aria-label="Máximo 20 puntos">(0-20 puntos)</span>
                         </div>
                         
                         <div class="eval-criteria">
                             <div class="criteria-item">
-                                <label>4.1 Antecedentes</label>
+                                <label for="eval4_1">4.1 Antecedentes</label>
                                 <p class="criteria-desc">Revisión de investigaciones y proyectos previos</p>
-                                <input type="number" id="eval4_1" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval4_1" 
+                                    name="eval4_1"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para antecedentes"
+                                    aria-describedby="eval4_1-max">
+                                <span class="max-points" id="eval4_1-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>4.2 Bases teóricas</label>
+                                <label for="eval4_2">4.2 Bases teóricas</label>
                                 <p class="criteria-desc">Fundamentos teóricos y conceptuales sólidos</p>
-                                <input type="number" id="eval4_2" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval4_2" 
+                                    name="eval4_2"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para bases teóricas"
+                                    aria-describedby="eval4_2-max">
+                                <span class="max-points" id="eval4_2-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>4.3 Estado del arte</label>
+                                <label for="eval4_3">4.3 Estado del arte</label>
                                 <p class="criteria-desc">Conocimiento actual sobre el tema de investigación</p>
-                                <input type="number" id="eval4_3" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval4_3" 
+                                    name="eval4_3"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para estado del arte"
+                                    aria-describedby="eval4_3-max">
+                                <span class="max-points" id="eval4_3-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>4.4 Referencias bibliográficas</label>
+                                <label for="eval4_4">4.4 Referencias bibliográficas</label>
                                 <p class="criteria-desc">Calidad, actualidad y pertinencia de las fuentes</p>
-                                <input type="number" id="eval4_4" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval4_4" 
+                                    name="eval4_4"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para referencias bibliográficas"
+                                    aria-describedby="eval4_4-max">
+                                <span class="max-points" id="eval4_4-max">/ 5 pts</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Observaciones sobre el Marco Teórico</label>
-                            <textarea id="obs4" rows="3" placeholder="Comentarios sobre el marco teórico y conceptual..."></textarea>
+                            <label for="obs4">Observaciones sobre el Marco Teórico</label>
+                            <textarea 
+                                id="obs4" 
+                                name="obs4"
+                                rows="3" 
+                                placeholder="Comentarios sobre el marco teórico y conceptual..."
+                                aria-label="Observaciones sobre el marco teórico"></textarea>
                         </div>
-                        <div class="section-total">Subtotal Sección 4: <span id="subtotal4">0</span> / 20</div>
-                    </div>
+                        <div class="section-total" role="status" aria-live="polite">
+                            Subtotal Sección 4: <span id="subtotal4">0</span> / 20
+                        </div>
+                    </section>
 
                     <!-- SECCIÓN 5 -->
-                    <div class="eval-section">
+                    <section class="eval-section" role="region" aria-labelledby="section5-title">
                         <div class="section-header">
-                            <h3>5️⃣ Metodología y Desarrollo</h3>
-                            <span class="section-points">(0-20 puntos)</span>
+                            <h3 id="section5-title">⚙️ 5. Metodología y Desarrollo</h3>
+                            <span class="section-points" aria-label="Máximo 20 puntos">(0-20 puntos)</span>
                         </div>
                         
                         <div class="eval-criteria">
                             <div class="criteria-item">
-                                <label>5.1 Diseño metodológico</label>
+                                <label for="eval5_1">5.1 Diseño metodológico</label>
                                 <p class="criteria-desc">Coherencia y adecuación de la metodología propuesta</p>
-                                <input type="number" id="eval5_1" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval5_1" 
+                                    name="eval5_1"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para diseño metodológico"
+                                    aria-describedby="eval5_1-max">
+                                <span class="max-points" id="eval5_1-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>5.2 Técnicas e instrumentos</label>
+                                <label for="eval5_2">5.2 Técnicas e instrumentos</label>
                                 <p class="criteria-desc">Selección apropiada de herramientas y técnicas</p>
-                                <input type="number" id="eval5_2" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval5_2" 
+                                    name="eval5_2"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para técnicas e instrumentos"
+                                    aria-describedby="eval5_2-max">
+                                <span class="max-points" id="eval5_2-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>5.3 Plan de trabajo</label>
+                                <label for="eval5_3">5.3 Plan de trabajo</label>
                                 <p class="criteria-desc">Cronograma y actividades bien definidas</p>
-                                <input type="number" id="eval5_3" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval5_3" 
+                                    name="eval5_3"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para plan de trabajo"
+                                    aria-describedby="eval5_3-max">
+                                <span class="max-points" id="eval5_3-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>5.4 Viabilidad</label>
+                                <label for="eval5_4">5.4 Viabilidad</label>
                                 <p class="criteria-desc">Factibilidad técnica, económica y temporal</p>
-                                <input type="number" id="eval5_4" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval5_4" 
+                                    name="eval5_4"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para viabilidad"
+                                    aria-describedby="eval5_4-max">
+                                <span class="max-points" id="eval5_4-max">/ 5 pts</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Observaciones sobre la Metodología</label>
-                            <textarea id="obs5" rows="3" placeholder="Comentarios sobre metodología y plan de desarrollo..."></textarea>
+                            <label for="obs5">Observaciones sobre la Metodología</label>
+                            <textarea 
+                                id="obs5" 
+                                name="obs5"
+                                rows="3" 
+                                placeholder="Comentarios sobre metodología y plan de desarrollo..."
+                                aria-label="Observaciones sobre la metodología"></textarea>
                         </div>
-                        <div class="section-total">Subtotal Sección 5: <span id="subtotal5">0</span> / 20</div>
-                    </div>
+                        <div class="section-total" role="status" aria-live="polite">
+                            Subtotal Sección 5: <span id="subtotal5">0</span> / 20
+                        </div>
+                    </section>
 
                     <!-- SECCIÓN 6 -->
-                    <div class="eval-section">
+                    <section class="eval-section" role="region" aria-labelledby="section6-title">
                         <div class="section-header">
-                            <h3>6️⃣ Innovación y Originalidad</h3>
-                            <span class="section-points">(0-10 puntos)</span>
+                            <h3 id="section6-title">💡 6. Innovación y Originalidad</h3>
+                            <span class="section-points" aria-label="Máximo 10 puntos">(0-10 puntos)</span>
                         </div>
                         
                         <div class="eval-criteria">
                             <div class="criteria-item">
-                                <label>6.1 Grado de innovación</label>
+                                <label for="eval6_1">6.1 Grado de innovación</label>
                                 <p class="criteria-desc">Aporte novedoso y diferenciador del proyecto</p>
-                                <input type="number" id="eval6_1" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval6_1" 
+                                    name="eval6_1"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para grado de innovación"
+                                    aria-describedby="eval6_1-max">
+                                <span class="max-points" id="eval6_1-max">/ 5 pts</span>
                             </div>
                             
                             <div class="criteria-item">
-                                <label>6.2 Originalidad</label>
+                                <label for="eval6_2">6.2 Originalidad</label>
                                 <p class="criteria-desc">Creatividad y enfoque único de la propuesta</p>
-                                <input type="number" id="eval6_2" min="0" max="5" step="0.5" required>
-                                <span class="max-points">/ 5 pts</span>
+                                <input 
+                                    type="number" 
+                                    id="eval6_2" 
+                                    name="eval6_2"
+                                    min="0" 
+                                    max="5" 
+                                    step="0.5" 
+                                    value="0"
+                                    required
+                                    oninput="calculateScore()"
+                                    aria-label="Calificación para originalidad"
+                                    aria-describedby="eval6_2-max">
+                                <span class="max-points" id="eval6_2-max">/ 5 pts</span>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Observaciones sobre Innovación</label>
-                            <textarea id="obs6" rows="3" placeholder="Comentarios sobre el carácter innovador del proyecto..."></textarea>
+                            <label for="obs6">Observaciones sobre Innovación</label>
+                            <textarea 
+                                id="obs6" 
+                                name="obs6"
+                                rows="3" 
+                                placeholder="Comentarios sobre el carácter innovador del proyecto..."
+                                aria-label="Observaciones sobre innovación"></textarea>
                         </div>
-                        <div class="section-total">Subtotal Sección 6: <span id="subtotal6">0</span> / 10</div>
-                    </div>
+                        <div class="section-total" role="status" aria-live="polite">
+                            Subtotal Sección 6: <span id="subtotal6">0</span> / 10
+                        </div>
+                    </section>
 
                     <!-- CALIFICACIÓN FINAL -->
-                    <div class="final-score-section">
-                        <h3>📊 Calificación Final</h3>
+                    <section class="final-score-section" role="region" aria-labelledby="final-score-title">
+                        <h3 id="final-score-title">📊 Calificación Final</h3>
                         <div class="score-breakdown">
                             <div class="score-row">
                                 <span>Datos Generales y Presentación:</span>
@@ -537,12 +959,17 @@
                             </div>
                         </div>
                         
-                        <div class="evaluation-status" id="evaluationStatus"></div>
-                    </div>
+                        <div class="evaluation-status" id="evaluationStatus" role="status" aria-live="polite"></div>
+                    </section>
 
                     <div class="form-group">
-                        <label>Recomendaciones Finales</label>
-                        <textarea id="finalRecommendations" rows="4" placeholder="Sugerencias y recomendaciones generales para el proyecto..."></textarea>
+                        <label for="finalRecommendations">Recomendaciones Finales</label>
+                        <textarea 
+                            id="finalRecommendations" 
+                            name="finalRecommendations"
+                            rows="4" 
+                            placeholder="Sugerencias y recomendaciones generales para el proyecto..."
+                            aria-label="Recomendaciones finales"></textarea>
                     </div>
 
                     <div class="form-actions">
@@ -552,7 +979,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -561,3 +988,5 @@
     <script src="app.js"></script>
 </body>
 </html>
+
+
