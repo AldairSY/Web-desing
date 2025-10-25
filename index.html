@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Evaluación de Proyectos de Investigación e Innovación - IEST Andrés Avelino Cáceres Dorregaray">
+    <meta name="theme-color" content="#00D9FF">
+    <title>Sistema de Investigación e Innovación - IEST</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- PANTALLA DE LOGIN -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="logo-container">
+                <img src="logo-upla.png" alt="Logo IEST Andrés Avelino Cáceres Dorregaray" class="logo">
+                <h1>Sistema de Investigación e Innovación</h1>
+            </div>
+            
+            <form id="loginForm" class="login-form" aria-labelledby="login-heading">
+                <h2 id="login-heading" class="sr-only">Formulario de inicio de sesión</h2>
+                <div class="form-group">
+                    <label for="email">Correo Institucional</label>
+                    <input type="email" id="email" name="email" required 
+                           placeholder="tu.email@iest.edu.pe"
+                           autocomplete="email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required 
+                           placeholder="Ingresa tu contraseña"
+                           autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-large">
+                    <span>Iniciar Sesión</span>
+                </button>
+                
+                <div id="loginError" class="error-message" role="alert" aria-live="polite"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE DASHBOARD -->
+    <div id="dashboardPage" class="page">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <img src="logo-upla.png" alt="Logo IEST" class="navbar-logo">
+                <span class="navbar-title">Sistema de Investigación e Innovación</span>
+            </div>
+            <div class="navbar-user">
+                <span class="user-name" id="userName">Usuario</span>
+                <button id="logoutBtn" class="btn btn-secondary btn-small">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <header class="dashboard-header">
+                <h1 class="page-title">Categorías de Innovación</h1>
+                <p class="page-subtitle">Selecciona una categoría para ver y gestionar proyectos</p>
+            </header>
+
+            <div class="categories-grid">
+                <div class="category-card" data-category="tecnologica">
+                    <div class="category-icon">💻</div>
+                    <h3>Innovación Tecnológica</h3>
+                    <p>Proyectos de desarrollo tecnológico y software</p>
+                    <button class="btn btn-primary" onclick="selectCategory('tecnologica')">
+                        Ver Proyectos
+                    </button>
+                </div>
+
+                <div class="category-card" data-category="aplicada">
+                    <div class="category-icon">🔬</div>
+                    <h3>Innovación Aplicada</h3>
+                    <p>Proyectos de investigación aplicada</p>
+                    <button class="btn btn-primary" onclick="selectCategory('aplicada')">
+                        Ver Proyectos
+                    </button>
+                </div>
+
+                <div class="category-card" data-category="pedagogica">
+                    <div class="category-icon">📚</div>
+                    <h3>Innovación Pedagógica</h3>
+                    <p>Proyectos de mejora educativa</p>
+                    <button class="btn btn-primary" onclick="selectCategory('pedagogica')">
+                        Ver Proyectos
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE LISTA DE PROYECTOS -->
+    <div id="projectsListPage" class="page">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <img src="logo-upla.png" alt="Logo IEST" class="navbar-logo">
+                <span class="navbar-title">Sistema de Investigación e Innovación</span>
+            </div>
+            <div class="navbar-user">
+                <span class="user-name" id="userName2">Usuario</span>
+                <button id="logoutBtn2" class="btn btn-secondary btn-small">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="page-header">
+                <button class="btn btn-secondary" onclick="showPage('dashboardPage')">
+                    ← Volver
+                </button>
+                <h1 id="categoryTitle">Proyectos</h1>
+            </div>
+
+            <!-- ✅ SISTEMA DE FILTROS AVANZADO -->
+            <div class="filters-section">
+                <div class="search-bar">
+                    <div class="search-input-wrapper">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            class="search-input-large" 
+                            placeholder="🔍 Buscar por nombre del proyecto..."
+                        >
+                    </div>
+                    <button class="btn btn-primary btn-add" onclick="showPage('newProjectPage')">
+                        + Agregar Nuevo Proyecto
+                    </button>
+                </div>
+                
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="filterType">Filtrar por Tipo:</label>
+                        <select id="filterType" class="filter-select">
+                            <option value="">Todos los tipos</option>
+                            <option value="aplicada">Aplicada</option>
+                            <option value="innovacion">Innovación</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterProgram">Filtrar por Programa:</label>
+                        <input 
+                            type="text" 
+                            id="filterProgram" 
+                            class="filter-input" 
+                            placeholder="Nombre del programa..."
+                        >
+                    </div>
+                    
+                    <div class="filter-actions">
+                        <button class="btn btn-secondary btn-clear" onclick="clearFilters()">
+                            🗑️ Limpiar Filtros
+                        </button>
+                        <div class="results-counter">
+                            <strong id="resultsCount">0</strong> proyectos encontrados
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="projectsList" class="projects-grid">
+                <!-- Los proyectos se cargarán dinámicamente aquí -->
+            </div>
+
+            <div id="noProjects" class="empty-state" style="display: none;">
+                <div class="empty-icon">📋</div>
+                <h3>No hay proyectos que coincidan con tu búsqueda</h3>
+                <p>Intenta ajustar los filtros o agregar un nuevo proyecto</p>
+                <button class="btn btn-primary" onclick="showPage('newProjectPage')">
+                    Agregar Proyecto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE NUEVO PROYECTO -->
+    <div id="newProjectPage" class="page">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <img src="logo-upla.png" alt="Logo IEST" class="navbar-logo">
+                <span class="navbar-title">Sistema de Investigación e Innovación</span>
+            </div>
+            <div class="navbar-user">
+                <span class="user-name" id="userName3">Usuario</span>
+                <button id="logoutBtn3" class="btn btn-secondary btn-small">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="page-header">
+                <button class="btn btn-secondary" onclick="showPage('projectsListPage')">
+                    ← Volver
+                </button>
+                <h1 class="page-title">✨ Agregar Nuevo Proyecto de Innovación</h1>
+            </div>
+
+            <form id="newProjectForm" class="project-form">
+                <div class="form-group">
+                    <label for="projectName">Título del Proyecto *</label>
+                    <input type="text" id="projectName" name="projectName" required 
+                           placeholder="Título completo del proyecto">
+                </div>
+
+                <div class="form-group">
+                    <label for="projectType">Tipo de Investigación *</label>
+                    <select id="projectType" name="projectType" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="aplicada">Aplicada</option>
+                        <option value="innovacion">Innovación</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="lineaInvestigacion">Línea de Investigación (Programa de Estudios) *</label>
+                    <input type="text" id="lineaInvestigacion" name="lineaInvestigacion" required 
+                           placeholder="Línea de investigación del proyecto">
+                </div>
+
+                <div class="form-group">
+                    <label for="integrantesIntegrantes">Integrante o Integrantes *</label>
+                    <textarea id="integrantesIntegrantes" name="integrantesIntegrantes" rows="3" required
+                              placeholder="Nombres completos de los integrantes (separados por coma)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="objetivoProyecto">Objetivo del Proyecto *</label>
+                    <textarea id="objetivoProyecto" name="objetivoProyecto" rows="4" required
+                              placeholder="Describa el objetivo principal del proyecto"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="beneficiarios">Beneficiarios *</label>
+                    <textarea id="beneficiarios" name="beneficiarios" rows="3" required
+                              placeholder="¿Quiénes se beneficiarán con este proyecto?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="localizacion">Localización *</label>
+                    <input type="text" id="localizacion" name="localizacion" required 
+                           placeholder="Ubicación donde se desarrollará el proyecto">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fechaInicio">Fecha de Inicio *</label>
+                        <input type="date" id="fechaInicio" name="fechaInicio" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaFin">Fecha de Finalización *</label>
+                        <input type="date" id="fechaFin" name="fechaFin" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectFile">Documento del Proyecto (formato .docx) *</label>
+                    <input type="file" id="projectFile" name="projectFile" accept=".docx,.doc" required>
+                    <small class="form-help">Solo se aceptan archivos en formato Word (.docx)</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="showPage('projectsListPage')">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        💾 Guardar Proyecto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE EVALUACIÓN DINÁMICA -->
+    <div id="evaluationPage" class="page">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <img src="logo-upla.png" alt="Logo IEST" class="navbar-logo">
+                <span class="navbar-title">Sistema de Investigación e Innovación</span>
+            </div>
+            <div class="navbar-user">
+                <span class="user-name" id="userName4">Usuario</span>
+                <button id="logoutBtn4" class="btn btn-secondary btn-small">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="page-header">
+                <button class="btn btn-secondary" onclick="showPage('projectsListPage')">
+                    ← Volver
+                </button>
+                <h1 class="page-title" id="evalProjectTitle">Evaluación del Proyecto</h1>
+            </div>
+
+            <div class="evaluation-container">
+                <!-- Información del Proyecto -->
+                <div class="project-info-card">
+                    <h3>Información del Proyecto</h3>
+                    <div id="projectInfoDisplay"></div>
+                </div>
+
+                <!-- Formulario de Evaluación Dinámico (se genera con JS) -->
+                <div id="dynamicEvaluationContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
