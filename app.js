@@ -32,26 +32,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         fileInput.addEventListener('change', handleFileSelect);
     }
 });
-
-// MANEJO DE ARCHIVO
+// MANEJO DE ARCHIVO - ACEPTA WORD Y PDF
 function handleFileSelect(event) {
     const file = event.target.files[0];
     if (file) {
         const validTypes = [
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'application/msword'
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+            'application/msword', // .doc
+            'application/pdf' // .pdf
         ];
         
-        if (!validTypes.includes(file.type) && !file.name.endsWith('.docx') && !file.name.endsWith('.doc')) {
-            alert('Por favor selecciona un archivo Word (.docx o .doc)');
+        const validExtensions = ['.docx', '.doc', '.pdf'];
+        const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+        
+        if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
+            alert('Por favor selecciona un archivo Word (.docx, .doc) o PDF (.pdf)');
+            event.target.value = '';
+            return;
+        }
+        
+        // Validar tamaño (máximo 50MB)
+        const maxSize = 50 * 1024 * 1024; // 50MB en bytes
+        if (file.size > maxSize) {
+            alert('El archivo es demasiado grande. Tamaño máximo: 50MB');
             event.target.value = '';
             return;
         }
         
         selectedFile = file;
-        console.log('Archivo seleccionado:', file.name);
+        console.log('Archivo seleccionado:', file.name, 'Tipo:', file.type, 'Tamaño:', (file.size / 1024 / 1024).toFixed(2), 'MB');
     }
 }
+
 
 // NAVEGACIÓN ENTRE PÁGINAS
 function showPage(pageId) {
