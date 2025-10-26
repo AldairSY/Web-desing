@@ -19,27 +19,23 @@
                 <img src="logo-upla.png" alt="Logo IEST Andrés Avelino Cáceres Dorregaray" class="logo">
                 <h1>Sistema de Investigación e Innovación</h1>
             </div>
-            
             <form id="loginForm" class="login-form" aria-labelledby="login-heading">
                 <h2 id="login-heading" class="sr-only">Formulario de inicio de sesión</h2>
                 <div class="form-group">
                     <label for="email">Correo Institucional</label>
                     <input type="email" id="email" name="email" required 
-                           placeholder="tu.email@iest.edu.pe"
-                           autocomplete="email">
+                        placeholder="tu.email@iest.edu.pe"
+                        autocomplete="email">
                 </div>
-                
                 <div class="form-group">
                     <label for="password">Contraseña</label>
                     <input type="password" id="password" name="password" required 
-                           placeholder="Ingresa tu contraseña"
-                           autocomplete="current-password">
+                        placeholder="Ingresa tu contraseña"
+                        autocomplete="current-password">
                 </div>
-                
                 <button type="submit" class="btn btn-primary btn-large">
                     <span>Iniciar Sesión</span>
                 </button>
-                
                 <div id="loginError" class="error-message" role="alert" aria-live="polite"></div>
             </form>
         </div>
@@ -57,13 +53,11 @@
                 <button id="logoutBtn" class="btn btn-secondary btn-small">Cerrar Sesión</button>
             </div>
         </nav>
-
         <div class="dashboard-container">
             <header class="dashboard-header">
                 <h1 class="page-title">Categorías de Innovación</h1>
                 <p class="page-subtitle">Selecciona una categoría para ver y gestionar proyectos</p>
             </header>
-
             <div class="categories-grid">
                 <div class="category-card" data-category="tecnologica">
                     <div class="category-icon">💻</div>
@@ -105,7 +99,6 @@
                 <button id="logoutBtn2" class="btn btn-secondary btn-small">Cerrar Sesión</button>
             </div>
         </nav>
-
         <div class="dashboard-container">
             <div class="page-header">
                 <button class="btn btn-secondary" onclick="showPage('dashboardPage')">
@@ -113,7 +106,6 @@
                 </button>
                 <h1 id="categoryTitle">Proyectos</h1>
             </div>
-
             <!-- FILTROS AVANZADOS -->
             <div class="filters-section">
                 <div class="search-bar">
@@ -128,7 +120,6 @@
                         + Agregar Nuevo Proyecto
                     </button>
                 </div>
-                
                 <div class="filters-grid">
                     <div class="filter-group">
                         <label for="filterType">Filtrar por Tipo:</label>
@@ -138,7 +129,6 @@
                             <option value="innovacion">Innovación</option>
                         </select>
                     </div>
-                    
                     <div class="filter-group">
                         <label for="filterProgram">Filtrar por Programa:</label>
                         <input 
@@ -147,7 +137,6 @@
                             class="filter-input" 
                             placeholder="Nombre del programa...">
                     </div>
-                    
                     <div class="filter-actions">
                         <button class="btn btn-secondary btn-clear" onclick="clearFilters()">
                             🗑️ Limpiar Filtros
@@ -158,11 +147,9 @@
                     </div>
                 </div>
             </div>
-
             <div id="projectsList" class="projects-grid">
                 <!-- Los proyectos se cargarán dinámicamente aquí -->
             </div>
-
             <div id="noProjects" class="empty-state" style="display: none;">
                 <div class="empty-icon">📋</div>
                 <h3>No hay proyectos que coincidan con tu búsqueda</h3>
@@ -186,7 +173,6 @@
                 <button id="logoutBtn3" class="btn btn-secondary btn-small">Cerrar Sesión</button>
             </div>
         </nav>
-
         <div class="dashboard-container">
             <div class="page-header">
                 <button class="btn btn-secondary" onclick="showPage('projectsListPage')">
@@ -194,12 +180,11 @@
                 </button>
                 <h1 class="page-title">✨ Agregar Nuevo Proyecto de Innovación</h1>
             </div>
-
             <form id="newProjectForm" class="project-form">
                 <div class="form-group">
                     <label for="projectName">Título del Proyecto *</label>
                     <input type="text" id="projectName" name="projectName" required 
-                           placeholder="Título completo del proyecto">
+                        placeholder="Título completo del proyecto">
                 </div>
                 <div class="form-group">
                     <label for="projectType">Tipo de Investigación *</label>
@@ -212,27 +197,27 @@
                 <div class="form-group">
                     <label for="lineaInvestigacion">Línea de Investigación (Programa de Estudios) *</label>
                     <input type="text" id="lineaInvestigacion" name="lineaInvestigacion" required 
-                           placeholder="Línea de investigación del proyecto">
+                        placeholder="Línea de investigación del proyecto">
                 </div>
                 <div class="form-group">
                     <label for="integrantesIntegrantes">Integrante o Integrantes *</label>
                     <textarea id="integrantesIntegrantes" name="integrantesIntegrantes" rows="3" required
-                              placeholder="Nombres completos de los integrantes (separados por coma)"></textarea>
+                        placeholder="Nombres completos de los integrantes (separados por coma)"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="objetivoProyecto">Objetivo del Proyecto *</label>
                     <textarea id="objetivoProyecto" name="objetivoProyecto" rows="4" required
-                              placeholder="Describa el objetivo principal del proyecto"></textarea>
+                        placeholder="Describa el objetivo principal del proyecto"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="beneficiarios">Beneficiarios *</label>
                     <textarea id="beneficiarios" name="beneficiarios" rows="3" required
-                              placeholder="¿Quiénes se beneficiarán con este proyecto?"></textarea>
+                        placeholder="¿Quiénes se beneficiarán con este proyecto?"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="localizacion">Localización *</label>
                     <input type="text" id="localizacion" name="localizacion" required 
-                           placeholder="Ubicación donde se desarrollará el proyecto">
+                        placeholder="Ubicación donde se desarrollará el proyecto">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -244,18 +229,17 @@
                         <input type="date" id="fechaFin" name="fechaFin" required>
                     </div>
                 </div>
-                <!-- CAMPO PDF SOLO PDF Y 10MB -->
+                <!-- CAMPO DE ARCHIVO MULTIFORMATO -->
                 <div class="form-group">
-                    <label for="projectPDF">Documento PDF del Proyecto *</label>
+                    <label for="projectFile">Documento del Proyecto *</label>
                     <input 
-                        type="file" 
-                        id="projectPDF" 
-                        name="projectPDF" 
-                        accept="application/pdf"
-                        required
-                        onchange="validatePDF(this)">
+                        type="file"
+                        id="projectFile"
+                        name="projectFile"
+                        accept=".doc,.docx,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf"
+                        required>
                     <small class="form-help">
-                        Solo se aceptan archivos en formato PDF (.pdf), tamaño máximo 10MB
+                        Solo se aceptan archivos Word (.docx, .doc) o PDF (.pdf), tamaño máximo 50MB
                     </small>
                 </div>
                 <div class="form-actions">
@@ -282,7 +266,6 @@
                 <button id="logoutBtn4" class="btn btn-secondary btn-small">Cerrar Sesión</button>
             </div>
         </nav>
-
         <div class="dashboard-container">
             <div class="page-header">
                 <button class="btn btn-secondary" onclick="showPage('projectsListPage')">
@@ -306,24 +289,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabaseClient.js"></script>
     <script src="app.js"></script>
-    <!-- Script para validar PDF HU-03 -->
-    <script>
-    function validatePDF(input) {
-        const file = input.files[0];
-        if (file) {
-            if (file.type !== "application/pdf") {
-                alert("Solo se permiten archivos PDF (.pdf).");
-                input.value = "";
-                return;
-            }
-            if (file.size > 10 * 1024 * 1024) {
-                alert("El archivo no debe superar los 10MB.");
-                input.value = "";
-                return;
-            }
-        }
-    }
-    </script>
 </body>
 </html>
 
