@@ -73,7 +73,6 @@
                         Ver Proyectos
                     </button>
                 </div>
-
                 <div class="category-card" data-category="aplicada">
                     <div class="category-icon">🔬</div>
                     <h3>Innovación Aplicada</h3>
@@ -82,7 +81,6 @@
                         Ver Proyectos
                     </button>
                 </div>
-
                 <div class="category-card" data-category="pedagogica">
                     <div class="category-icon">📚</div>
                     <h3>Innovación Pedagógica</h3>
@@ -116,7 +114,7 @@
                 <h1 id="categoryTitle">Proyectos</h1>
             </div>
 
-            <!-- ✅ SISTEMA DE FILTROS AVANZADO -->
+            <!-- FILTROS AVANZADOS -->
             <div class="filters-section">
                 <div class="search-bar">
                     <div class="search-input-wrapper">
@@ -124,8 +122,7 @@
                             type="text" 
                             id="searchInput" 
                             class="search-input-large" 
-                            placeholder="🔍 Buscar por nombre del proyecto..."
-                        >
+                            placeholder="🔍 Buscar por nombre del proyecto...">
                     </div>
                     <button class="btn btn-primary btn-add" onclick="showPage('newProjectPage')">
                         + Agregar Nuevo Proyecto
@@ -148,8 +145,7 @@
                             type="text" 
                             id="filterProgram" 
                             class="filter-input" 
-                            placeholder="Nombre del programa..."
-                        >
+                            placeholder="Nombre del programa...">
                     </div>
                     
                     <div class="filter-actions">
@@ -205,7 +201,6 @@
                     <input type="text" id="projectName" name="projectName" required 
                            placeholder="Título completo del proyecto">
                 </div>
-
                 <div class="form-group">
                     <label for="projectType">Tipo de Investigación *</label>
                     <select id="projectType" name="projectType" required>
@@ -214,55 +209,55 @@
                         <option value="innovacion">Innovación</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="lineaInvestigacion">Línea de Investigación (Programa de Estudios) *</label>
                     <input type="text" id="lineaInvestigacion" name="lineaInvestigacion" required 
                            placeholder="Línea de investigación del proyecto">
                 </div>
-
                 <div class="form-group">
                     <label for="integrantesIntegrantes">Integrante o Integrantes *</label>
                     <textarea id="integrantesIntegrantes" name="integrantesIntegrantes" rows="3" required
                               placeholder="Nombres completos de los integrantes (separados por coma)"></textarea>
                 </div>
-
                 <div class="form-group">
                     <label for="objetivoProyecto">Objetivo del Proyecto *</label>
                     <textarea id="objetivoProyecto" name="objetivoProyecto" rows="4" required
                               placeholder="Describa el objetivo principal del proyecto"></textarea>
                 </div>
-
                 <div class="form-group">
                     <label for="beneficiarios">Beneficiarios *</label>
                     <textarea id="beneficiarios" name="beneficiarios" rows="3" required
                               placeholder="¿Quiénes se beneficiarán con este proyecto?"></textarea>
                 </div>
-
                 <div class="form-group">
                     <label for="localizacion">Localización *</label>
                     <input type="text" id="localizacion" name="localizacion" required 
                            placeholder="Ubicación donde se desarrollará el proyecto">
                 </div>
-
                 <div class="form-row">
                     <div class="form-group">
                         <label for="fechaInicio">Fecha de Inicio *</label>
                         <input type="date" id="fechaInicio" name="fechaInicio" required>
                     </div>
-
                     <div class="form-group">
                         <label for="fechaFin">Fecha de Finalización *</label>
                         <input type="date" id="fechaFin" name="fechaFin" required>
                     </div>
                 </div>
-
+                <!-- CAMPO PDF SOLO PDF Y 10MB -->
                 <div class="form-group">
-                    <label for="projectFile">Documento del Proyecto (formato .docx) *</label>
-                    <input type="file" id="projectFile" name="projectFile" accept=".docx,.doc" required>
-                    <small class="form-help">Solo se aceptan archivos en formato Word (.docx)</small>
+                    <label for="projectPDF">Documento PDF del Proyecto *</label>
+                    <input 
+                        type="file" 
+                        id="projectPDF" 
+                        name="projectPDF" 
+                        accept="application/pdf"
+                        required
+                        onchange="validatePDF(this)">
+                    <small class="form-help">
+                        Solo se aceptan archivos en formato PDF (.pdf), tamaño máximo 10MB
+                    </small>
                 </div>
-
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="showPage('projectsListPage')">
                         Cancelar
@@ -295,14 +290,12 @@
                 </button>
                 <h1 class="page-title" id="evalProjectTitle">Evaluación del Proyecto</h1>
             </div>
-
             <div class="evaluation-container">
                 <!-- Información del Proyecto -->
                 <div class="project-info-card">
                     <h3>Información del Proyecto</h3>
                     <div id="projectInfoDisplay"></div>
                 </div>
-
                 <!-- Formulario de Evaluación Dinámico (se genera con JS) -->
                 <div id="dynamicEvaluationContainer"></div>
             </div>
@@ -313,5 +306,24 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabaseClient.js"></script>
     <script src="app.js"></script>
+    <!-- Script para validar PDF HU-03 -->
+    <script>
+    function validatePDF(input) {
+        const file = input.files[0];
+        if (file) {
+            if (file.type !== "application/pdf") {
+                alert("Solo se permiten archivos PDF (.pdf).");
+                input.value = "";
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                alert("El archivo no debe superar los 10MB.");
+                input.value = "";
+                return;
+            }
+        }
+    }
+    </script>
 </body>
 </html>
+
